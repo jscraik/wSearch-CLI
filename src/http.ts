@@ -16,15 +16,26 @@ export async function fetchWithRetry(
   let lastError: unknown;
 
   for (let attempt = 0; attempt <= options.retries; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), options.timeout);
     try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), options.timeout);
       const response = await fetch(input, { ...init, signal: controller.signal });
       clearTimeout(timer);
 
       if (response.status === 429 || response.status >= 500) {
         const retryAfter = response.headers.get("retry-after");
-        const waitMs = retryAfter ? Number(retryAfter) * 1000 : options.retryBackoff * (attempt + 1);
+        let waitMs = options.retryBackoff * (attempt + 1);
+        if (retryAfter) {
+          const seconds = Number(retryAfter);
+          if (!Number.isNaN(seconds)) {
+            waitMs = Math.max(0, seconds * 1000);
+          } else {
+            const dateMs = Date.parse(retryAfter);
+            if (!Number.isNaN(dateMs)) {
+              waitMs = Math.max(0, dateMs - Date.now());
+            }
+          }
+        }
         if (attempt < options.retries) {
           options.logger.verbose(`Retrying after ${waitMs}ms (status ${response.status})`);
           await delay(waitMs);
@@ -34,6 +45,7 @@ export async function fetchWithRetry(
 
       return response;
     } catch (error) {
+      clearTimeout(timer);
       lastError = error;
       if (attempt < options.retries) {
         const waitMs = options.retryBackoff * (attempt + 1);
@@ -48,8 +60,8 @@ export async function fetchWithRetry(
 }
 
 export async function readBody(response: Response): Promise<unknown> {
-  const contentType = response.headers.get("content-type") ?? "";
-  if (contentType.includes("application/json")) {
+  const contentType = (response.headers.get("content-type") ?? "").toLowerCase();
+  if (contentType.includes("application/json") || contentType.includes("+json")) {
     return response.json();
   }
   return response.text();

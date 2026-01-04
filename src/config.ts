@@ -13,6 +13,13 @@ export type CredentialsFile = {
 
 export type ConfigFile = {
   profile?: string;
+  userAgent?: string;
+  apiUrl?: string;
+  actionUrl?: string;
+  sparqlUrl?: string;
+  timeout?: number;
+  retries?: number;
+  retryBackoff?: number;
 };
 
 export function getConfigDir(): string {

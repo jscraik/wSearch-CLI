@@ -2,7 +2,7 @@
 
 This guide lists the most common errors and how to fix them.
 
-Last updated: 2026-01-03
+Last updated: 2026-01-04
 
 ## Table of contents
 - [Prerequisites](#prerequisites)
@@ -51,9 +51,13 @@ Fix: add `--user-agent` or set `WIKIDATA_USER_AGENT`.
 Cause: server throttling or temporary outage.
 Fix: retry with backoff or wait before re-running.
 
-### Symptom: "Passphrase entry requires a TTY"
-Cause: encrypted token entry needs interactive input.
-Fix: run in a TTY without `--no-input`.
+### Symptom: "Passphrase input required"
+Cause: encrypted token entry needs a passphrase.
+Fix: provide `--passphrase-file`, `--passphrase-stdin`, or `--passphrase-env` (or set `WIKIDATA_PASSPHRASE`).
+
+### Symptom: "Failed to read config file"
+Cause: malformed JSON in `~/.config/wikidata-cli/config.json`.
+Fix: fix the JSON or delete the file and retry.
 
 ## Reference
 - Usage: `docs/USAGE.md`.

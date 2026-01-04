@@ -19,7 +19,7 @@ brAInwav · Wikidata
 
 Safe, script-friendly CLI for Wikidata REST, SPARQL, and Action API queries. Read-only by default.
 
-Last updated: 2026-01-03
+Last updated: 2026-01-04
 
 ## Table of contents
 - [Prerequisites](#prerequisites)
@@ -83,7 +83,36 @@ wikidata --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 cat token.txt | wikidata auth login --token-stdin
 wikidata --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
+- Non-interactive (CI-friendly) example:
+```sh
+export WIKIDATA_TOKEN="your-token"
+export WIKIDATA_PASSPHRASE="your-passphrase"
+wikidata auth login
+```
+- Custom env var names:
+```sh
+export MY_WD_TOKEN="your-token"
+export MY_WD_PASSPHRASE="your-passphrase"
+wikidata auth login --token-env MY_WD_TOKEN --passphrase-env MY_WD_PASSPHRASE
+```
 - Verify: request succeeds; token is stored in `~/.config/wikidata-cli/credentials.json`.
+
+### Set a default User-Agent
+- What you get: a persistent User-Agent without repeating flags.
+- Steps:
+```sh
+wikidata config set user-agent "MyApp/1.0 (https://example.org/contact)"
+wikidata --network entity get Q42
+```
+- Verify: requests succeed without `--user-agent`.
+
+### Preview a request without sending it
+- What you get: method, URL, and headers with tokens redacted.
+- Steps:
+```sh
+wikidata --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+```
+- Verify: output includes a preview and no network call is made.
 
 ## Troubleshooting
 ### Symptom: "User-Agent is required"
@@ -115,4 +144,6 @@ Fix: retry after a short delay or lower request frequency.
   - `wikidata action search --query <text>`
   - `wikidata raw request <method> <path>`
   - `wikidata auth login|status|logout`
+  - `wikidata config get|set|path`
   - `wikidata doctor`
+  - `wikidata completion`

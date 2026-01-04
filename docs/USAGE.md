@@ -2,7 +2,7 @@
 
 This reference lists commands, flags, and examples for the public CLI.
 
-Last updated: 2026-01-03
+Last updated: 2026-01-04
 
 ## Table of contents
 - [Prerequisites](#prerequisites)
@@ -75,6 +75,34 @@ wikidata --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 cat token.txt | wikidata auth login --token-stdin
 wikidata --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
+- Non-interactive example:
+```sh
+export WIKIDATA_TOKEN="your-token"
+export WIKIDATA_PASSPHRASE="your-passphrase"
+wikidata auth login
+```
+- Custom env var names:
+```sh
+export MY_WD_TOKEN="your-token"
+export MY_WD_PASSPHRASE="your-passphrase"
+wikidata auth login --token-env MY_WD_TOKEN --passphrase-env MY_WD_PASSPHRASE
+```
+
+### Set a default User-Agent
+- What you get: a persistent User-Agent without repeating flags.
+- Steps:
+```sh
+wikidata config set user-agent "MyApp/1.0 (https://example.org/contact)"
+```
+- Verify: `wikidata --network entity get Q42` works without `--user-agent`.
+
+### Preview a request without sending it
+- What you get: method, URL, headers (tokens redacted).
+- Steps:
+```sh
+wikidata --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+```
+- Verify: output contains a preview and no network call is made.
 
 ## Troubleshooting
 ### Symptom: "Path must start with '/'"
@@ -85,9 +113,9 @@ wikidata --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   raw request GET /entities/items/Q42
 ```
 
-### Symptom: "Passphrase entry requires a TTY"
-Cause: encrypted token storage requires interactive input.
-Fix: run the command in an interactive terminal without `--no-input`.
+### Symptom: "Passphrase input required"
+Cause: encrypted token storage needs a passphrase.
+Fix: provide `--passphrase-file`, `--passphrase-stdin`, or `--passphrase-env` (or set `WIKIDATA_PASSPHRASE`).
 
 ### Symptom: "User-Agent is required"
 Cause: User-Agent is missing.
@@ -101,15 +129,22 @@ Fix: add `--user-agent` or set `WIKIDATA_USER_AGENT`.
 - `wikidata action search --query <text> [--language <lang>] [--limit <n>]`
 - `wikidata raw request <method> <path> [--body-file <json>]`
 - `wikidata auth login|status|logout`
+- `wikidata config get|set|path`
 - `wikidata doctor`
+- `wikidata completion`
 
 ### Global flags
 - `--network`: enable network access (required for any API call).
 - `--user-agent`: required for Wikimedia APIs.
 - `--auth`: use stored token for `Authorization: Bearer`.
+- `--request-id <id>`: attach a request id to JSON output.
+- `--print-request`: print request preview and exit.
+- `--passphrase-file <file>`: read passphrase from file.
+- `--passphrase-stdin`: read passphrase from stdin.
+- `--passphrase-env <name>`: read passphrase from env var (name).
 - `--json`: JSON envelope output.
 - `--plain`: plain output for scripts.
-- `--output <file>`: write to file or `-` for stdout.
+- `-o, --output <file>`: write to file or `-` for stdout.
 - `--timeout <ms>`: request timeout (default 15000).
 - `--retries <n>`: retries for 429/5xx (default 2).
 - `--retry-backoff <ms>`: base backoff in ms (default 400).

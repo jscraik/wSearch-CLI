@@ -26,6 +26,11 @@ export type CliGlobals = {
   noInput: boolean;
   network: boolean;
   auth: boolean;
+  requestId?: string;
+  printRequest: boolean;
+  passphraseFile?: string;
+  passphraseStdin?: boolean;
+  passphraseEnv?: string;
   userAgent?: string;
   apiUrl: string;
   actionUrl: string;

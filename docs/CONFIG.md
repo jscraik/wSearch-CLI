@@ -2,7 +2,7 @@
 
 This guide explains environment variables, local config, and encrypted credentials.
 
-Last updated: 2026-01-03
+Last updated: 2026-01-04
 
 ## Table of contents
 - [Prerequisites](#prerequisites)
@@ -13,7 +13,7 @@ Last updated: 2026-01-03
 
 ## Prerequisites
 - Required: Node.js 18+, npm.
-- Optional: a token file if you want authenticated reads.
+- Optional: an OAuth token (file/env) if you want authenticated reads.
 
 ## Quickstart
 ### 1) Set a User-Agent
@@ -31,11 +31,31 @@ Expected output:
 - JSON entity data printed to stdout.
 
 ## Common tasks
+### Set a default User-Agent
+- What you get: a persistent User-Agent for all commands.
+- Steps:
+```sh
+wikidata config set user-agent "MyApp/1.0 (https://example.org/contact)"
+```
+- Verify: `wikidata --network entity get Q42` works without `--user-agent`.
+
+### Locate the config file
+- Steps:
+```sh
+wikidata config path
+```
+
 ### Store an encrypted token
 - What you get: encrypted credentials in the XDG config directory.
 - Steps:
 ```sh
 cat token.txt | wikidata auth login --token-stdin
+```
+- Non-interactive example:
+```sh
+export WIKIDATA_TOKEN="your-token"
+export WIKIDATA_PASSPHRASE="your-passphrase"
+wikidata auth login
 ```
 - Verify: `~/.config/wikidata-cli/credentials.json` exists and is not plaintext.
 
@@ -51,9 +71,9 @@ wikidata --network --api-url https://www.wikidata.org/w/rest.php/wikibase/v1 \
 - Verify: requests go to the specified endpoints.
 
 ## Troubleshooting
-### Symptom: "Passphrase entry requires a TTY"
-Cause: encrypted token storage requires interactive input.
-Fix: run in a TTY without `--no-input`.
+### Symptom: "Passphrase input required"
+Cause: encrypted token storage needs a passphrase.
+Fix: provide `--passphrase-file`, `--passphrase-stdin`, or `--passphrase-env` (or set `WIKIDATA_PASSPHRASE`).
 
 ### Symptom: "No stored token found"
 Cause: `--auth` was used before `auth login`.
@@ -69,9 +89,27 @@ Fix: set `WIKIDATA_USER_AGENT` or pass `--user-agent`.
 ## Reference
 ### Environment variables
 - `WIKIDATA_USER_AGENT`: required User-Agent string.
+- `WIKIDATA_TOKEN`: token source for `wikidata auth login`.
+- `WIKIDATA_PASSPHRASE`: passphrase source for encrypted token storage.
 - `WIKIDATA_API_URL`: REST API base URL.
 - `WIKIDATA_ACTION_URL`: Action API URL.
 - `WIKIDATA_SPARQL_URL`: SPARQL endpoint URL.
+- `WIKIDATA_TIMEOUT`: request timeout in ms.
+- `WIKIDATA_RETRIES`: retry count for 429/5xx.
+- `WIKIDATA_RETRY_BACKOFF`: base backoff in ms.
+
+### Config keys (for `wikidata config set|get`)
+Use `none` to unset a value.
+- `user-agent`
+- `api-url`
+- `action-url`
+- `sparql-url`
+- `timeout`
+- `retries`
+- `retry-backoff`
+
+### Precedence
+Flags > Environment > Config file > Defaults.
 
 ### Local config paths
 - Config dir: `~/.config/wikidata-cli/`

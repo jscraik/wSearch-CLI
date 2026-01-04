@@ -2,7 +2,7 @@
 
 Short answers to common questions.
 
-Last updated: 2026-01-03
+Last updated: 2026-01-04
 
 ## Table of contents
 - [Prerequisites](#prerequisites)
@@ -32,7 +32,10 @@ No. All commands are read-only.
 Use `--user-agent` or set `WIKIDATA_USER_AGENT`.
 
 ### Can I use a token?
-Yes. Store it with `wikidata auth login` and pass `--auth`.
+Yes. Store it with `wikidata auth login` and pass `--auth`. For non-interactive use, set `WIKIDATA_TOKEN` and `WIKIDATA_PASSPHRASE` (or use `--token-env`/`--passphrase-env`).
+
+### Can I set defaults for User-Agent or endpoints?
+Yes. Use `wikidata config set user-agent|api-url|action-url|sparql-url`.
 
 ### Does this work with other Wikibase instances?
 Yes. Provide `--api-url`, `--action-url`, and `--sparql-url`.

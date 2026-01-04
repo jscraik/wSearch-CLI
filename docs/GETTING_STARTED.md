@@ -2,7 +2,7 @@
 
 This guide helps developers install the CLI and run their first Wikidata query end to end.
 
-Last updated: 2026-01-03
+Last updated: 2026-01-04
 
 ## Table of contents
 - [Prerequisites](#prerequisites)
@@ -58,7 +58,21 @@ wikidata --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 cat token.txt | wikidata auth login --token-stdin
 wikidata --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
+- Non-interactive (CI-friendly) example:
+```sh
+export WIKIDATA_TOKEN="your-token"
+export WIKIDATA_PASSPHRASE="your-passphrase"
+wikidata auth login
+```
 - Verify: token stored in `~/.config/wikidata-cli/credentials.json`.
+
+### Set a default User-Agent
+- What you get: a persistent User-Agent without repeating flags.
+- Steps:
+```sh
+wikidata config set user-agent "MyApp/1.0 (https://example.org/contact)"
+```
+- Verify: `wikidata --network entity get Q42` works without `--user-agent`.
 
 ## Troubleshooting
 ### Symptom: "User-Agent is required"

@@ -15,24 +15,37 @@ export function readFile(filePath: string): string {
 }
 
 export async function promptHidden(prompt: string): Promise<string> {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stderr });
-  const onData = (char: Buffer) => {
-    const str = char.toString();
-    if (str === "\n" || str === "\r" || str === "\u0004") {
-      process.stderr.write("\n");
-    } else {
-      process.stderr.write("*");
-    }
-  };
-  process.stdin.on("data", onData);
-
-  const value = await new Promise<string>((resolve) => {
-    rl.question(prompt, (answer) => resolve(answer));
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stderr,
+    terminal: true
   });
+  const rlAny = rl as unknown as {
+    output: NodeJS.WritableStream;
+    _writeToOutput?: (text: string) => void;
+  };
+  const output = rlAny.output;
 
-  process.stdin.removeListener("data", onData);
-  rl.close();
-  return value.trim();
+  rlAny._writeToOutput = (text: string) => {
+    if (text === "\n" || text === "\r") {
+      output.write(text);
+      return;
+    }
+    if (text === "\b \b") {
+      output.write(text);
+      return;
+    }
+    output.write("*");
+  };
+
+  try {
+    const value = await new Promise<string>((resolve) => {
+      rl.question(prompt, (answer) => resolve(answer));
+    });
+    return value.trim();
+  } finally {
+    rl.close();
+  }
 }
 
 export async function promptText(prompt: string): Promise<string> {
