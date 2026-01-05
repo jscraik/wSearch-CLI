@@ -12,3 +12,4 @@ This folder contains approved documentation mark assets for use in repository RE
 - `brand-mark@2x.webp`
 - `brand-mark.png` (optional fallback)
 - `brand-mark@2x.png` (optional fallback)
+- `wsearchcli-hero-logo.png` - Main hero logo with neural network design for README header

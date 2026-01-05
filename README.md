@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="brand/wiki-brand-logo.png" alt="wSearch CLI Logo" width="600"/>
+  <img src="brand/wSearch-brand-logo.png" alt="wSearch CLI Logo" width="600"/>
 </div>
 
 [![npm](https://img.shields.io/npm/v/@brainwav/wsearch-cli?color=d97757)](https://www.npmjs.com/package/@brainwav/wsearch-cli)
