@@ -1,4 +1,4 @@
-# Get started with the brAInwav wiKi CLI in minutes
+# Get started with the brAInwav wSearch CLI in minutes
 
 This guide helps developers install the CLI and run their first Wikidata query end to end.
 It is the shortest path to a working query. It uses safe read-only defaults.
@@ -30,12 +30,12 @@ Last updated: 2026-01-04
 ## Quickstart
 ### 1) Install
 ```sh
-npm install -g wiki-cli
+npm install -g @brainwav/wsearch-cli
 ```
 
 ### 2) Run your first query
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### 3) Verify
@@ -48,7 +48,7 @@ Expected output:
 - What you get: a local JSON file with the entity data.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   entity get Q42 --output ./Q42.json
 ```
 - Verify: `./Q42.json` exists and contains JSON.
@@ -57,7 +57,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: SPARQL results as JSON, CSV, or TSV.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   sparql query --file ./query.rq --format json
 ```
 - Verify: result set printed to stdout.
@@ -66,24 +66,24 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: `Authorization: Bearer ...` added to requests.
 - Steps:
 ```sh
-cat token.txt | wiki auth login --token-stdin
-wiki --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+cat token.txt | wsearch auth login --token-stdin
+wsearch --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Non-interactive (CI-friendly) example:
 ```sh
 export WIKI_TOKEN="your-token"
 export WIKI_PASSPHRASE="your-passphrase"
-wiki auth login
+wsearch auth login
 ```
-- Verify: token stored in `~/.config/wiki-cli/credentials.json`.
+- Verify: token stored in `~/.config/wsearch-cli/credentials.json`.
 
 ### Set a default User-Agent
 - What you get: a persistent User-Agent without repeating flags.
 - Steps:
 ```sh
-wiki config set user-agent "MyApp/1.0 (https://example.org/contact)"
+wsearch config set user-agent "MyApp/1.0 (https://example.org/contact)"
 ```
-- Verify:  `wiki --network entity get Q42` works without `--user-agent`.
+- Verify:  `wsearch --network entity get Q42` works without `--user-agent`.
 
 ## Risks and assumptions
 - API calls require `--network`. The CLI defaults to no-network for safety.
@@ -95,14 +95,14 @@ wiki config set user-agent "MyApp/1.0 (https://example.org/contact)"
 Cause: User-Agent is mandatory for Wikimedia APIs.
 Fix:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### Symptom: "Network access is disabled"
-Cause: the CLI defaults to no network.
+Cause: default is offline.
 Fix:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### Symptom: 429 rate limit

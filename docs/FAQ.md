@@ -1,4 +1,4 @@
-# brAInwav wiKi CLI FAQ
+# brAInwav wSearch CLI FAQ
 
 Short answers to common questions.
 
@@ -26,22 +26,22 @@ No. All commands are read-only.
 Use `--user-agent` or set `WIKI_USER_AGENT`.
 
 ### Can I use a token?
-Yes. Store it with  `wiki auth login` and pass `--auth`. For non-interactive use,
+Yes. Store it with  `wsearch auth login` and pass `--auth`. For non-interactive use,
 set `WIKI_TOKEN` and `WIKI_PASSPHRASE` (or use `--token-env` and `--passphrase-env`).
 
 ### Can I set defaults for User-Agent or endpoints?
-Yes. Use  `wiki config set user-agent|api-url|action-url|sparql-url` to persist values.
+Yes. Use  `wsearch config set user-agent|api-url|action-url|sparql-url` to persist values.
 
 ### Does this work with other Wikibase instances?
 Yes. Provide `--api-url`, `--action-url`, and `--sparql-url`.
 
 ### Where are tokens stored?
-In `~/.config/wiki-cli/credentials.json`, encrypted with AES-256-GCM and scrypt.
+In `~/.config/wsearch-cli/credentials.json`, encrypted with AES-256-GCM and scrypt.
 
 ## Troubleshooting
 ### Symptom: 401 or 403
 Cause: missing or invalid token.
-Fix: re-run  `wiki auth login` and confirm the token.
+Fix: re-run  `wsearch auth login` and confirm the token.
 
 ## Reference
 - Usage: `docs/USAGE.md`.

@@ -1,5 +1,5 @@
 import fs from "fs";
-import { JsonEnvelope, LogLevel, OutputMode } from "./types.js";
+import type { JsonEnvelope, LogLevel, OutputMode } from "./types.js";
 
 export type Logger = {
   info: (msg: string) => void;
@@ -21,7 +21,7 @@ export function createLogger(level: LogLevel): Logger {
       quiet: 0,
       info: 1,
       verbose: 2,
-      debug: 3
+      debug: 3,
     };
     return rank[level] >= rank[target] && level !== "quiet";
   };
@@ -38,7 +38,7 @@ export function createLogger(level: LogLevel): Logger {
     },
     error: (msg) => {
       process.stderr.write(`${msg}\n`);
-    }
+    },
   };
 }
 
@@ -48,13 +48,13 @@ export function envelope<T>(
   status: "success" | "warn" | "error",
   data: T,
   errors: Array<{ message: string; code?: string }> = [],
-  requestId?: string
+  requestId?: string,
 ): JsonEnvelope<T> {
   const meta = {
-    tool: "wiki",
+    tool: "wsearch",
     version: process.env.npm_package_version ?? "0.0.0",
     timestamp: new Date().toISOString(),
-    ...(requestId !== undefined ? { request_id: requestId } : {})
+    ...(requestId !== undefined ? { request_id: requestId } : {}),
   };
   return {
     schema,
@@ -62,7 +62,7 @@ export function envelope<T>(
     summary,
     status,
     data,
-    errors
+    errors,
   };
 }
 

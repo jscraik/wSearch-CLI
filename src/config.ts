@@ -1,6 +1,6 @@
 import fs from "fs";
-import path from "path";
 import os from "os";
+import path from "path";
 
 export type CredentialsFile = {
   version: 1;
@@ -25,9 +25,9 @@ export type ConfigFile = {
 export function getConfigDir(): string {
   const xdg = process.env.XDG_CONFIG_HOME;
   if (xdg && xdg.trim().length > 0) {
-    return path.join(xdg, "wiki-cli");
+    return path.join(xdg, "wsearch-cli");
   }
-  return path.join(os.homedir(), ".config", "wiki-cli");
+  return path.join(os.homedir(), ".config", "wsearch-cli");
 }
 
 export function getConfigPath(): string {
@@ -53,7 +53,10 @@ export function loadConfig(): ConfigFile {
 export function saveConfig(config: ConfigFile): void {
   ensureConfigDir();
   const file = getConfigPath();
-  fs.writeFileSync(file, JSON.stringify(config, null, 2), { encoding: "utf8", mode: 0o600 });
+  fs.writeFileSync(file, JSON.stringify(config, null, 2), {
+    encoding: "utf8",
+    mode: 0o600,
+  });
 }
 
 export function loadCredentials(): CredentialsFile | null {
@@ -66,7 +69,10 @@ export function loadCredentials(): CredentialsFile | null {
 export function saveCredentials(payload: CredentialsFile): void {
   ensureConfigDir();
   const file = getCredentialsPath();
-  fs.writeFileSync(file, JSON.stringify(payload, null, 2), { encoding: "utf8", mode: 0o600 });
+  fs.writeFileSync(file, JSON.stringify(payload, null, 2), {
+    encoding: "utf8",
+    mode: 0o600,
+  });
 }
 
 export function removeCredentials(): void {

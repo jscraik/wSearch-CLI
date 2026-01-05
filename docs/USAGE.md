@@ -1,4 +1,4 @@
-# Use the brAInwav wiKi CLI to query Wikidata end to end
+# Use the brAInwav wSearch CLI to query Wikidata end to end
 
 This reference lists commands, flags, and examples for the public CLI.
 
@@ -30,7 +30,7 @@ Last updated: 2026-01-04
 ## Quickstart
 ### 1) Run a basic query
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### 2) Verify
@@ -42,7 +42,7 @@ Expected output:
 - What you get: the entity JSON for Q/P/L ids.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Verify: output includes `id` and `labels`.
 
@@ -50,7 +50,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get
 - What you get: statements for the entity.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity statements Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity statements Q42
 ```
 - Verify: output includes statement arrays.
 
@@ -58,7 +58,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity sta
 - What you get: query results in JSON/CSV/TSV.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   sparql query --file ./query.rq --format json
 ```
 - Verify: results include `head` and `results`.
@@ -67,7 +67,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: entity search results.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   action search --query "New York" --language en --limit 5
 ```
 - Verify: results include `id` and `label` fields.
@@ -76,7 +76,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: raw REST response for a path under the REST API base.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   raw request GET /entities/items/Q42
 ```
 - Verify: response contains the entity data.
@@ -85,49 +85,49 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: `Authorization: Bearer` header added.
 - Steps:
 ```sh
-cat token.txt | wiki auth login --token-stdin
-wiki --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+cat token.txt | wsearch auth login --token-stdin
+wsearch --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Non-interactive example:
 ```sh
 export WIKI_TOKEN="your-token"
 export WIKI_PASSPHRASE="your-passphrase"
-wiki auth login
+wsearch auth login
 ```
 - Custom env var names:
 ```sh
 export MY_WIKI_TOKEN="your-token"
 export MY_WIKI_PASSPHRASE="your-passphrase"
-wiki auth login --token-env MY_WIKI_TOKEN --passphrase-env MY_WIKI_PASSPHRASE
+wsearch auth login --token-env MY_WIKI_TOKEN --passphrase-env MY_WIKI_PASSPHRASE
 ```
 
 ### Set a default User-Agent
 - What you get: a persistent User-Agent without repeating flags.
 - Steps:
 ```sh
-wiki config set user-agent "MyApp/1.0 (https://example.org/contact)"
+wsearch config set user-agent "MyApp/1.0 (https://example.org/contact)"
 ```
-- Verify:  `wiki --network entity get Q42` works without `--user-agent`.
+- Verify:  `wsearch --network entity get Q42` works without `--user-agent`.
 
 ### Preview a request without sending it
 - What you get: method, URL, headers (tokens redacted).
 - Steps:
 ```sh
-wiki --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Verify: output contains a preview and no network call is made.
 
 ## Command reference
-- `wiki help [command]`
-- `wiki entity get <id>`
-- `wiki entity statements <id>`
-- `wiki sparql query --file <query.rq> --format json|csv|tsv`
-- `wiki action search --query <text> [--language <lang>] [--limit <n>]`
-- `wiki raw request <method> <path> [--body-file <json>]`
-- `wiki auth login|status|logout`
-- `wiki config get|set|path`
-- `wiki doctor`
-- `wiki completion`
+- `wsearch help [command]`
+- `wsearch entity get <id>`
+- `wsearch entity statements <id>`
+- `wsearch sparql query --file <query.rq> --format json|csv|tsv`
+- `wsearch action search --query <text> [--language <lang>] [--limit <n>]`
+- `wsearch raw request <method> <path> [--body-file <json>]`
+- `wsearch auth login|status|logout`
+- `wsearch config get|set|path`
+- `wsearch doctor`
+- `wsearch completion`
 
 ## Global flags
 - `--network`: enable network access (required for any API call).
@@ -172,7 +172,7 @@ wiki --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" enti
 Cause: raw requests require an absolute path.
 Fix:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   raw request GET /entities/items/Q42
 ```
 

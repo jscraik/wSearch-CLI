@@ -1,4 +1,4 @@
-# Configure the brAInwav wiKi CLI safely
+# Configure the brAInwav wSearch CLI safely
 
 This guide explains environment variables, local config, and encrypted credentials.
 Use it for repeatable CLI runs. It helps you avoid retyping flags.
@@ -37,7 +37,7 @@ export WIKI_USER_AGENT="MyApp/1.0 (https://example.org/contact)"
 
 ### 2) Run a query
 ```sh
-wiki --network entity get Q42
+wsearch --network entity get Q42
 ```
 
 ### 3) Verify
@@ -49,35 +49,35 @@ Expected output:
 - What you get: a persistent User-Agent for all commands.
 - Steps:
 ```sh
-wiki config set user-agent "MyApp/1.0 (https://example.org/contact)"
+wsearch config set user-agent "MyApp/1.0 (https://example.org/contact)"
 ```
-- Verify:  `wiki --network entity get Q42` works without `--user-agent`.
+- Verify:  `wsearch --network entity get Q42` works without `--user-agent`.
 
 ### Locate the config file
 - Steps:
 ```sh
-wiki config path
+wsearch config path
 ```
 
 ### Store an encrypted token
 - What you get: encrypted credentials in the XDG config directory.
 - Steps:
 ```sh
-cat token.txt | wiki auth login --token-stdin
+cat token.txt | wsearch auth login --token-stdin
 ```
 - Non-interactive example:
 ```sh
 export WIKI_TOKEN="your-token"
 export WIKI_PASSPHRASE="your-passphrase"
-wiki auth login
+wsearch auth login
 ```
-- Verify: `~/.config/wiki-cli/credentials.json` exists and is not plaintext.
+- Verify: `~/.config/wsearch-cli/credentials.json` exists and is not plaintext.
 
 ### Change endpoints
 - What you get: custom API endpoints for other Wikibase instances.
 - Steps:
 ```sh
-wiki --network --api-url https://www.wikidata.org/w/rest.php/wikibase/v1 \
+wsearch --network --api-url https://www.wikidata.org/w/rest.php/wikibase/v1 \
   --action-url https://www.wikidata.org/w/api.php \
   --sparql-url https://query.wikidata.org/sparql \
   entity get Q42
@@ -87,7 +87,7 @@ wiki --network --api-url https://www.wikidata.org/w/rest.php/wikibase/v1 \
 ## Reference
 ### Environment variables
 - `WIKI_USER_AGENT`: required User-Agent string.
-- `WIKI_TOKEN`: token source for  `wiki auth login`.
+- `WIKI_TOKEN`: token source for  `wsearch auth login`.
 - `WIKI_PASSPHRASE`: passphrase source for encrypted token storage.
 - `WIKI_API_URL`: REST API base URL.
 - `WIKI_ACTION_URL`: Action API URL.
@@ -96,7 +96,7 @@ wiki --network --api-url https://www.wikidata.org/w/rest.php/wikibase/v1 \
 - `WIKI_RETRIES`: retry count for 429/5xx.
 - `WIKI_RETRY_BACKOFF`: base backoff in ms.
 
-### Config keys (for  `wiki config set|get`)
+### Config keys (for  `wsearch config set|get`)
 Use `none` to unset a value.
 - `user-agent`
 - `api-url`
@@ -110,9 +110,9 @@ Use `none` to unset a value.
 Flags > Environment > Config file > Defaults.
 
 ### Local config paths
-- Config dir: `~/.config/wiki-cli/`
-- Config file: `~/.config/wiki-cli/config.json`
-- Credentials: `~/.config/wiki-cli/credentials.json` (AES-256-GCM + scrypt).
+- Config dir: `~/.config/wsearch-cli/`
+- Config file: `~/.config/wsearch-cli/config.json`
+- Credentials: `~/.config/wsearch-cli/credentials.json` (AES-256-GCM + scrypt).
 
 ## Risks and assumptions
 - Config and credential files are stored locally. Protect filesystem permissions.
@@ -128,7 +128,7 @@ Fix: provide `--passphrase-file`, `--passphrase-stdin`, or `--passphrase-env` (o
 Cause: `--auth` was used before `auth login`.
 Fix:
 ```sh
-wiki auth login --token-stdin < token.txt
+wsearch auth login --token-stdin < token.txt
 ```
 
 ### Symptom: "User-Agent is required"

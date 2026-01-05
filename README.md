@@ -1,21 +1,13 @@
-```text
-$ wiki --help
-W   W  III  K   K  III
-W   W   I   K  K   I
-W W W   I   KK    I
-WW WW   I   KK    I
-W   W   I   K  K   I
-W   W  III  K   K  III
+<div align="center">
+  <img src="brand/wiki-brand-logo.png" alt="wSearch CLI Logo" width="600"/>
+</div>
 
-brAInwav · wiKi CLI
-```
-
-[![npm](https://img.shields.io/npm/v/wiki-cli?color=d97757)](https://www.npmjs.com/package/wiki-cli)
-[![ci](https://github.com/jscraik/wiKi-CLI/actions/workflows/ci.yml/badge.svg)](https://github.com/jscraik/wiKi-CLI/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@brainwav/wsearch-cli?color=d97757)](https://www.npmjs.com/package/@brainwav/wsearch-cli)
+[![ci](https://github.com/jscraik/wSearch-CLI/actions/workflows/ci.yml/badge.svg)](https://github.com/jscraik/wSearch-CLI/actions/workflows/ci.yml)
 [![security](https://img.shields.io/badge/security-policy-6a9bcc)](SECURITY.md)
 [![license](https://img.shields.io/badge/license-MIT-788c5d)](LICENSE)
 
-# brAInwav wiKi CLI helps developers query Wikidata safely and quickly
+# brAInwav wSearch CLI helps developers query Wikidata safely and quickly
 
 Safe, script-friendly CLI for Wikidata REST, SPARQL, and Action API queries. Read-only by default.
 
@@ -45,12 +37,12 @@ Last updated: 2026-01-04
 ## Quickstart
 ### 1) Install
 ```sh
-npm install -g wiki-cli
+npm install -g @brainwav/wsearch-cli
 ```
 
 ### 2) Run a query
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### 3) Verify
@@ -63,7 +55,7 @@ Expected output:
 - What you get: the entity JSON for a Q/P/L id.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   entity get Q42 --output ./Q42.json
 ```
 - Verify: `./Q42.json` contains the entity data.
@@ -72,7 +64,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: SPARQL results in JSON/CSV/TSV.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   sparql query --file ./query.rq --format json
 ```
 - Verify: result set printed to stdout.
@@ -81,7 +73,7 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: entity search results by label.
 - Steps:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
   action search --query "New York" --language en --limit 5
 ```
 - Verify: results include matches with ids and labels.
@@ -90,29 +82,29 @@ wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" \
 - What you get: authenticated requests using `Authorization: Bearer ...`.
 - Steps:
 ```sh
-cat token.txt | wiki auth login --token-stdin
-wiki --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+cat token.txt | wsearch auth login --token-stdin
+wsearch --network --auth --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Non-interactive (CI-friendly) example:
 ```sh
 export WIKI_TOKEN="your-token"
 export WIKI_PASSPHRASE="your-passphrase"
-wiki auth login
+wsearch auth login
 ```
 - Custom env var names:
 ```sh
 export MY_WIKI_TOKEN="your-token"
 export MY_WIKI_PASSPHRASE="your-passphrase"
-wiki auth login --token-env MY_WIKI_TOKEN --passphrase-env MY_WIKI_PASSPHRASE
+wsearch auth login --token-env MY_WIKI_TOKEN --passphrase-env MY_WIKI_PASSPHRASE
 ```
-- Verify: request succeeds; token is stored in `~/.config/wiki-cli/credentials.json`.
+- Verify: request succeeds; token is stored in `~/.config/wsearch-cli/credentials.json`.
 
 ### Set a default User-Agent
 - What you get: a persistent User-Agent without repeating flags.
 - Steps:
 ```sh
-wiki config set user-agent "MyApp/1.0 (https://example.org/contact)"
-wiki --network entity get Q42
+wsearch config set user-agent "MyApp/1.0 (https://example.org/contact)"
+wsearch --network entity get Q42
 ```
 - Verify: requests succeed without `--user-agent`.
 
@@ -120,7 +112,7 @@ wiki --network entity get Q42
 - What you get: method, URL, and headers with tokens redacted.
 - Steps:
 ```sh
-wiki --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Verify: output includes a preview and no network call is made.
 
@@ -128,7 +120,7 @@ wiki --print-request --user-agent "MyApp/1.0 (https://example.org/contact)" enti
 - What you get: a quick view of config state without making requests.
 - Steps:
 ```sh
-wiki doctor
+wsearch doctor
 ```
 - Verify: output reports User-Agent and token presence.
 
@@ -144,14 +136,14 @@ wiki doctor
 Cause: Wikimedia APIs require a descriptive User-Agent.
 Fix:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### Symptom: "Network access is disabled"
 Cause: the CLI defaults to no network.
 Fix:
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### Symptom: 429 or rate-limit errors
@@ -169,15 +161,15 @@ Fix: retry after a short delay or lower request frequency.
 - License: `LICENSE` (MIT).
 - Brand guidelines: `docs/BRAND.md`.
 - Commands:
-  - `wiki help [command]`
-  - `wiki entity get|statements <id>`
-  - `wiki sparql query --file <query.rq>`
-  - `wiki action search --query <text>`
-  - `wiki raw request <method> <path>`
-- `wiki auth login|status|logout`
-- `wiki config get|set|path`
-- `wiki doctor`
-- `wiki completion`
+  - `wsearch help [command]`
+  - `wsearch entity get|statements <id>`
+  - `wsearch sparql query --file <query.rq>`
+  - `wsearch action search --query <text>`
+  - `wsearch raw request <method> <path>`
+- `wsearch auth login|status|logout`
+- `wsearch config get|set|path`
+- `wsearch doctor`
+- `wsearch completion`
 
 ---
 

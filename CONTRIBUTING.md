@@ -1,4 +1,4 @@
-# Contributing to brAInwav wiKi CLI
+# Contributing to brAInwav wSearch CLI
 
 Thanks for contributing. This guide explains how to set up your dev environment, run checks, and keep changes consistent.
 

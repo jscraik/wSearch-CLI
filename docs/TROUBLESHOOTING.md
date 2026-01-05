@@ -1,4 +1,4 @@
-# Fix common brAInwav wiKi CLI issues quickly
+# Fix common brAInwav wSearch CLI issues quickly
 
 This guide lists the most common errors and how to fix them.
 
@@ -27,12 +27,12 @@ Last updated: 2026-01-04
 ## Quickstart
 ### 1) Confirm the CLI is installed
 ```sh
-wiki --version
+wsearch --version
 ```
 
 ### 2) Verify network and User-Agent
 ```sh
-wiki --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 
 ### 3) Verify
@@ -44,7 +44,7 @@ Expected output:
 - What you get: detailed diagnostics in stderr.
 - Steps:
 ```sh
-wiki --network --debug --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
+wsearch --network --debug --user-agent "MyApp/1.0 (https://example.org/contact)" entity get Q42
 ```
 - Verify: stderr includes debug output.
 
@@ -70,7 +70,7 @@ Cause: encrypted token entry needs a passphrase.
 Fix: provide `--passphrase-file`, `--passphrase-stdin`, or `--passphrase-env` (or set `WIKI_PASSPHRASE`).
 
 ### Symptom: "Failed to read config file"
-Cause: malformed JSON in `~/.config/wiki-cli/config.json`.
+Cause: malformed JSON in `~/.config/wsearch-cli/config.json`.
 Fix: fix the JSON or delete the file and retry.
 
 ## Reference

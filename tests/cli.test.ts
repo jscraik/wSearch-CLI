@@ -1,7 +1,7 @@
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 
 function runCli(args: string[], options?: { env?: NodeJS.ProcessEnv }) {
@@ -9,7 +9,7 @@ function runCli(args: string[], options?: { env?: NodeJS.ProcessEnv }) {
     process.cwd(),
     "node_modules",
     ".bin",
-    process.platform === "win32" ? "tsx.cmd" : "tsx"
+    process.platform === "win32" ? "tsx.cmd" : "tsx",
   );
   const cliPath = path.join(process.cwd(), "src", "cli.ts");
 
@@ -19,14 +19,14 @@ function runCli(args: string[], options?: { env?: NodeJS.ProcessEnv }) {
 
   const result = spawnSync(tsxPath, [cliPath, ...args], {
     encoding: "utf8",
-    env: { ...process.env, NODE_NO_WARNINGS: "1", ...options?.env }
+    env: { ...process.env, NODE_NO_WARNINGS: "1", ...options?.env },
   });
 
   return {
     status: result.status ?? -1,
     stdout: result.stdout ?? "",
     stderr: result.stderr ?? "",
-    error: result.error
+    error: result.error,
   };
 }
 
@@ -54,7 +54,13 @@ describe("cli error handling", () => {
 
 describe("cli request preview", () => {
   it("prints a request preview without network access", () => {
-    const result = runCli(["--json", "--print-request", "entity", "get", "Q42"]);
+    const result = runCli([
+      "--json",
+      "--print-request",
+      "entity",
+      "get",
+      "Q42",
+    ]);
     expect(result.error).toBeUndefined();
     expect(result.status).toBe(0);
     const payload = JSON.parse(result.stdout.trim());
@@ -69,11 +75,15 @@ describe("cli config", () => {
   it("sets, gets, and resolves config values", () => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wiki-cli-"));
     const env = { XDG_CONFIG_HOME: tmpDir };
-    const setResult = runCli(["config", "set", "user-agent", "TestApp/1.0"], { env });
+    const setResult = runCli(["config", "set", "user-agent", "TestApp/1.0"], {
+      env,
+    });
     expect(setResult.error).toBeUndefined();
     expect(setResult.status).toBe(0);
 
-    const getResult = runCli(["--json", "config", "get", "user-agent"], { env });
+    const getResult = runCli(["--json", "config", "get", "user-agent"], {
+      env,
+    });
     expect(getResult.error).toBeUndefined();
     expect(getResult.status).toBe(0);
     const payload = JSON.parse(getResult.stdout.trim());
@@ -84,6 +94,8 @@ describe("cli config", () => {
     expect(pathResult.error).toBeUndefined();
     expect(pathResult.status).toBe(0);
     const pathPayload = JSON.parse(pathResult.stdout.trim());
-    expect(pathPayload.data.path).toContain(path.join(tmpDir, "wiki-cli", "config.json"));
+    expect(pathPayload.data.path).toContain(
+      path.join(tmpDir, "wsearch-cli", "config.json"),
+    );
   });
 });
